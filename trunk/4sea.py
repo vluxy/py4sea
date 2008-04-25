@@ -36,6 +36,7 @@ def getsvc():
         elif flag:
             newsvc[wdlist[0]] = wdlist[2][1:-1] #trim [ and ]
             if wdlist[0]=="txt":
+                newsvc["txt"] = wdlist[3][1:-2] #must have txt!!!
                 #newsvc["txt"] = newsvc["txt"].split()[1][1:-1] #must have txt!!! otherwise this has error
                 flag = False
                 svclist.append(newsvc)
