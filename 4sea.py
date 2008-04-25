@@ -33,7 +33,7 @@ def getsvc():
                 flag = True
                 newsvc = {}
                 newsvc["name"] = wdlist[3]
-        else if flag:
+        elif flag:
             newsvc[wdlist[0]] = wdlist[2][1:-1] #trim [ and ]
             if wdlist[0]=="txt":
                 newsvc["txt"] = newsvc["txt"].split()[1][1:-1] #must have txt!!! otherwise this has error
