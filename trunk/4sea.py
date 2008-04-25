@@ -67,9 +67,9 @@ def main():
     #getsvc()
     
     httpd = myHTTPserver(('',8080),myHTTPhandler)
-    thread.start_new_thread(httpd.handle_request,())
+    #thread.start_new_thread(httpd.handle_request,())
     webbrowser.open_new("http://localhost:8080/data")
-    
+    httpd.serve_forever()
     #pass
 
 if __name__ == '__main__':
