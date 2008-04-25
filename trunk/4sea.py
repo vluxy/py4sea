@@ -63,8 +63,8 @@ class myHTTPhandler(BaseHTTPServer.BaseHTTPRequestHandler):
 class myHTTPserver(BaseHTTPServer.HTTPServer): pass
 
 def main():
-    pub("myself test", "this is txt")
-    getsvc()
+    #pub("myself test", "this is txt")
+    #getsvc()
     
     httpd = myHTTPserver(('',8080),myHTTPhandler)
     thread.start_new_thread(httpd.handle_request,())
