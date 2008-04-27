@@ -53,8 +53,8 @@ def getMutual(name, txt):
     except IOError:
         try:
             myf = open("myself.dat")
-            mycxt = myf.readline().split(',')
-            mytag = myf.readline().split(',')
+            mycxt = myf.readline()[:-1].split(',')#trim \n
+            mytag = myf.readline()[:-1].split(',')
             myf.close()
             [cxt, tag] = txt.split(';')
             cxt = cxt.split(',')
