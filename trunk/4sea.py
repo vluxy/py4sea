@@ -115,7 +115,7 @@ def main():
     except IOError:
         myf = open("myself.dat","w")
         myf.write(mycxt.replace(" ","_") + "\n" + mytag.replace(" ","_") + "\n")
-        myf.close
+        myf.close()
     #pub("Junda Liu", mycxt + ";" + mytag) #pub will replace " " by "_"
 
     httpd = myHTTPserver(('',8080),myHTTPhandler)
