@@ -2,14 +2,16 @@
 # encoding: utf-8
 # Junda Liu
 
-import sys,os,thread
-import webbrowser
+import sys,os
+import webbrowser, urllib, socket
 import SocketServer, BaseHTTPServer, SimpleHTTPServer
 
+gmyname = ""
 def pub(name, txt):
     """call avahi to publish our svc, based on name and other info
     avahi-publish -s name _p2pchat._udp portnum hereistxt &"""
     (pin, pout) = os.popen2("avahi-publish -s "+name.replace(" ", "_")+" _p2pchat._udp 43210 "+txt.replace(" ","_")+" &")
+    (pin, pout) = os.popen2("python charsvr.py &")
     #print pout.read()
 
 def getsvc():
@@ -42,6 +44,13 @@ def getsvc():
                 flag = False
                 (newsvc["mcxt"], newsvc["mtag"])=getMutual(newsvc["name"],newsvc["txt"])
                 svclist.append(newsvc)
+                try:
+                    f=open(newsvc["name"]+".ip")
+                    f.close()
+                except IOError:
+                    f=open(newsvc["name"]+".ip",'w')
+                    f.write(newsvc["address"]+':'+newsvc["port"])
+                    f.close()
     pout.close
     return svclist
 def getMutual(name, txt):
@@ -59,7 +68,7 @@ def getMutual(name, txt):
             [cxt, tag] = txt.split(';')
             cxt = cxt.split(',')
             tag = tag.split(',')
-            print mycxt,mytag,cxt,tag
+            #print mycxt,mytag,cxt,tag
             f=open(name+".dat","a")
             for e in cxt:
                 if e in mycxt:
@@ -87,10 +96,14 @@ def formatdata(svclist):
     ret += '</tbody></table>'
     return ret
 
+def sendchat(name, msg):
+    addr = open(name+".ip").read().split(':')
+    sendudp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sendudp.sendto(gmyname+':'+msg.split('=')[1]+'\n',(addr[0],int(addr[1])))
+    sendudp.close()
+
 class myHTTPhandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path.endswith("favicon.ico"):
-            return
         if self.path.endswith("frlist"):
             result = formatdata(getsvc())
             self.send_response(200)
@@ -101,13 +114,25 @@ class myHTTPhandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             return
         SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
         #self.send_error(404, "File not found")
-        pass
+        #pass
     def do_POST(self):
-        pass
+        if self.path.endswith(".dat"):
+            length=int(self.headers.getheader('content-length'))
+            request = self.rfile.read(length)
+            print request
+            f=open(self.path[1:],'a')
+            f.write('<br>'+urllib.unquote_plus(request).replace('=',':'))
+            f.close()
+            sendchat(self.path[1:-4],request)
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", len(request))
+            self.end_headers()
+            self.wfile.write(request)
 
 class myHTTPserver(BaseHTTPServer.HTTPServer): pass
 
-def main():
+def main(name):
     mycxt = "Eric Brewer,Junda Liu,Lin Ning,Gunho Lee,Steve Jobs,Bill Gates"
     mytag = "Berkeley,Star Wars,iPhone,Acura MDX,N810,PSP,Guitar Hero"
     try:
@@ -116,7 +141,7 @@ def main():
         myf = open("myself.dat","w")
         myf.write(mycxt.replace(" ","_") + "\n" + mytag.replace(" ","_") + "\n")
         myf.close()
-    #pub("Junda Liu", mycxt + ";" + mytag) #pub will replace " " by "_"
+    #pub(name, mycxt + ";" + mytag) #pub will replace " " by "_"
 
     httpd = myHTTPserver(('',8080),myHTTPhandler)
     #thread.start_new_thread(httpd.handle_request,())
@@ -125,4 +150,9 @@ def main():
     #pass
 
 if __name__ == '__main__':
-    main()
+    if (len(sys.argv)>1):
+        name = sys.argv[1]
+    else:
+        name = "Junda Liu"
+    gmyname = name
+    main(name)
