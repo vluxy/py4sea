@@ -11,13 +11,29 @@ td {text-align: center;}
 $(document).ready(function(){
     $("#container > ul").tabs();
     $("div#buddylist").load("frlist");
+    $("#sendbtn").click(function(){
+        var name = $("li.ui-tabs-selected a span").html();
+        var spans = $("span");
+        var i;
+        var selected;
+        for (i=0;i<spans.length;i++){
+            if(spans[i].innerHTML==name){selected = i;}
+        }
+        if(selected > 0){
+            var msg = $("textarea#inputbox").val();
+            $.post("/"+name+".dat", {Myself: msg}, function(reply){
+                $('#container > ul').tabs("load",selected);
+                $("textarea#inputbox").val('');
+            });
+        }
+    });
     $("div#buddylist").ajaxComplete(function(){
-    $("tr:even").addClass("even");
-    $("tr").click(function(){
-        var name = $(this).children()[0].innerHTML;
-        var tabs = $("span:contains('"+name+"')");
-        if(tabs.length>0){return 1;}
-        $("#container > ul").tabs("add","/"+name+".dat",name);
+        $("tr:even").addClass("even");
+        $("tr").click(function(){
+            var name = $(this).children()[0].innerHTML;
+            var tabs = $("span:contains('"+name+"')");
+            if(tabs.length>0){return 1;}
+            $("#container > ul").tabs("add","/"+name+".dat",name);
         });
     });
 });
@@ -30,4 +46,5 @@ $(document).ready(function(){
 </ul>
 <div id="buddylist"></div>
 </div>
+<textarea id="inputbox" rows="5"></textarea><button id="sendbtn">Send</button>
 </body></html>
