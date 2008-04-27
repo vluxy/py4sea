@@ -7,7 +7,7 @@ td {text-align: center;}
 <script type="text/javascript" src="jquery.pack.js"></script>
 <script type="text/javascript" src="ui.base.js"></script>
 <script type="text/javascript" src="ui.tabs.js"></script>
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
     $("#container > ul").tabs();
     $("div#buddylist").load("frlist");
@@ -18,9 +18,8 @@ $(document).ready(function(){
         var tabs = $("span:contains('"+name+"')");
         if(tabs.length>0){return 1;}
         $("#container > ul").tabs("add","/"+name+".dat",name);
+        });
     });
-    });
-    
 });
 </script>
 </head>
