@@ -11,7 +11,7 @@ def pub(name, txt):
     """call avahi to publish our svc, based on name and other info
     avahi-publish -s name _p2pchat._udp portnum hereistxt &"""
     (pin, pout) = os.popen2("avahi-publish -s "+name.replace(" ", "_")+" _p2pchat._udp 43210 "+txt.replace(" ","_")+" &")
-    (pin, pout) = os.popen2("python charsvr.py &")
+    (pin, pout) = os.popen2("python chatsvr.py 43210 &")
     #print pout.read()
 
 def getsvc():
@@ -153,6 +153,6 @@ if __name__ == '__main__':
     if (len(sys.argv)>1):
         name = sys.argv[1]
     else:
-        name = "Junda Liu"
-    gmyname = name
+        name = socket.gethostname()
+    gmyname = name.replace(" ", "_")
     main(name)
