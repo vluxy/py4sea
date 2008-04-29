@@ -11,7 +11,7 @@ class myserver(SocketServer.ThreadingUDPServer):
     pass
 
 if __name__ == "__main__":
-    if len(sys.argv)==2:
+    if len(sys.argv)>1:
         listenport=int(sys.argv[1])
     else:
         listenport=43210
