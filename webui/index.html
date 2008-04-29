@@ -5,6 +5,7 @@ tr.even {background-color: #dfd;}
 td {text-align: center;}
 </style>
 <script type="text/javascript" src="jquery.pack.js"></script>
+<script type="text/javascript" src="jquery.timer.js"></script>
 <script type="text/javascript" src="ui.base.js"></script>
 <script type="text/javascript" src="ui.tabs.js"></script>
 <script type="text/javascript">
@@ -35,6 +36,18 @@ $(document).ready(function(){
             if(tabs.length>0){return 1;}
             $("#container > ul").tabs("add","/"+name+".dat",name);
         });
+    });
+    $.timer(5000, function(){
+        var name = $("li.ui-tabs-selected a span").html();
+        var spans = $("span");
+        var i;
+        var selected;
+        for (i=0;i<spans.length;i++){
+            if(spans[i].innerHTML==name){selected = i;}
+        }
+        if(selected > 0){
+            $('#container > ul').tabs("load",selected);
+        }
     });
 });
 </script>
