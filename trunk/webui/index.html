@@ -9,17 +9,28 @@ td {text-align: center;}
 <script type="text/javascript" src="ui.base.js"></script>
 <script type="text/javascript" src="ui.tabs.js"></script>
 <script type="text/javascript">
+function getselected(){
+    var name = $("li.ui-tabs-selected a span").html();
+    var spans = $("span");
+    var i;
+    var selected=0;
+    for (i=0;i<spans.length;i++){
+        if(spans[i].innerHTML==name){selected = i;break;}
+    }
+    return selected;    
+}
 $(document).ready(function(){
     $("#container > ul").tabs();
     $("div#buddylist").load("frlist");
-    $("#sendbtn").click(function(){
-        var name = $("li.ui-tabs-selected a span").html();
-        var spans = $("span");
-        var i;
-        var selected;
-        for (i=0;i<spans.length;i++){
-            if(spans[i].innerHTML==name){selected = i;}
+    $("#closebtn").click(function(){
+        var selected = getselected();
+        if(selected > 0){
+            $("#container > ul").tabs("remove",selected);
         }
+    });
+
+    $("#sendbtn").click(function(){
+        var selected = getselected();
         if(selected > 0){
             var msg = $("textarea#inputbox").val();
             $.post("/"+name+".dat", {Myself: msg}, function(reply){
@@ -38,13 +49,7 @@ $(document).ready(function(){
         });
     });
     $.timer(5000, function(){
-        var name = $("li.ui-tabs-selected a span").html();
-        var spans = $("span");
-        var i;
-        var selected;
-        for (i=0;i<spans.length;i++){
-            if(spans[i].innerHTML==name){selected = i;}
-        }
+        var selected = getselected();
         if(selected > 0){
             $('#container > ul').tabs("load",selected);
         }
@@ -59,5 +64,8 @@ $(document).ready(function(){
 </ul>
 <div id="buddylist"></div>
 </div>
-<textarea id="inputbox" rows="5"></textarea><button id="sendbtn">Send</button>
+<textarea id="inputbox" rows="2" cols="40"></textarea><button id="sendbtn">Send</button>
+<button id="closebtn">Close</button>
+<hr>
+<button id="cfgbtn">Config</button><button id="helpbtn">Help</button>
 </body></html>
