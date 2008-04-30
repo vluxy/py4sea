@@ -101,6 +101,7 @@ def sendchat(name, msg):
     sendudp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sendudp.sendto(gmyname+':'+msg.split('=')[1]+'\n',(addr[0],int(addr[1])))
     sendudp.close()
+    print addr
 
 class myHTTPhandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -119,7 +120,7 @@ class myHTTPhandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         if self.path.endswith(".dat"):
             length=int(self.headers.getheader('content-length'))
             request = self.rfile.read(length)
-            print request
+            #print request
             f=open(self.path[1:],'a')
             f.write('<br>'+urllib.unquote_plus(request).replace('=',':'))
             f.close()
@@ -137,6 +138,9 @@ def main(name):
     mytag = "Berkeley,Star Wars,iPhone,Acura MDX,N810,PSP,Guitar Hero"
     try:
         myf = open("myself.dat")
+        mycxt = myf.readline()[:-1]
+        mytag = myf.readline()[:-1]
+        myf.close()
     except IOError:
         myf = open("myself.dat","w")
         myf.write(mycxt.replace(" ","_") + "\n" + mytag.replace(" ","_") + "\n")
