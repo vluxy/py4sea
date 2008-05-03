@@ -97,11 +97,12 @@ def formatdata(svclist):
     return ret
 
 def sendchat(name, msg):
+    #print 'name='+name
     addr = open(name+".ip").read().split(':')
     sendudp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sendudp.sendto(gmyname+':'+msg.split('=')[1]+'\n',(addr[0],int(addr[1])))
     sendudp.close()
-    print addr
+    #print addr
 
 class myHTTPhandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -124,6 +125,7 @@ class myHTTPhandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             f=open(self.path[1:],'a')
             f.write('<br>'+urllib.unquote_plus(request).replace('=',':'))
             f.close()
+            #print 'path='+self.path
             sendchat(self.path[1:-4],request)
             self.send_response(200)
             self.send_header("Content-Type", "text/html")
