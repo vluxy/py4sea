@@ -87,7 +87,7 @@ def getMutual(name, txt):
             return ("","")
         
 def formatdata(svclist):
-    ret = '<table width="100%"><thead><tr><th>Name</th><th>Contacts</th><th>Tags</th></tr></thead><tbody>'
+    ret = '<table width="100%"><thead><tr><th>Name</th><th>Mutual Contacts</th><th>Mutual Tags</th></tr></thead><tbody>'
     for svc in svclist:
         ret += '<tr><td>'+svc["name"]+'</td>'
         ret += '<td>'+svc["mcxt"]+'</td>'
