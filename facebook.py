@@ -968,8 +968,14 @@ if __name__ == '__main__':
     #print 'Your UID:      ', facebook.uid
 
     info = facebook.users.getInfo([facebook.uid],['education_history'])[0]
+    str = ''
     for edu in info['education_history']:
-        print edu['name'], edu['degree'], edu['year']#"""edu['name'] edu['degree'] edu['year']"""
+        str+=edu['name']+','
+    str=str[:-1]+'\n'
+    f=open('facebook.dat','w')
+    f.write(str)
+    f.close()
+    #print edu['name'], edu['degree'], edu['year']#"""edu['name'] edu['degree'] edu['year']"""
     #print info
     
     """info = facebook.users.getInfo([facebook.uid], ['name', 'birthday', 'affiliations', 'sex'])[0]
