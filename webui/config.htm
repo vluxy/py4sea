@@ -1,1 +1,52 @@
-<html><body>config ...</body></html>
+<html><head><title>Config</title>
+<style type="text/css">
+th {background-color: #dfd;}
+td {text-align: center;}
+</style>
+<script type="text/javascript" src="jquery.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("div#mytags").load("my.tags");
+    $("div#mytags").ajaxComplete(function(){
+        $("div#mytags div").click(function(){
+            var tag=$(this);
+            var answer=confirm("Delete "+tag.html()+"? You can't undo this.");
+            if(answer){tag.remove();}
+        });
+    });
+    $("button#srchbtn").click(function(){
+        $("div#taglist").load("list.tags");
+    });
+    $("div#taglist").ajaxComplete(function(){
+        $("div#taglist div").click(function(e){
+            var tag=$(this);
+            var answer=confirm("Add "+tag.html()+" to your tag?");
+            if(answer){tag.unbind();$("div#mytags").append(tag);}
+        });
+    });
+    $("img#fb").click(function(){
+        $.get("/facebook");
+    });
+    $("button#addbtn").click(function(){
+        var str = $("input").val();
+        if(str.length>0){
+            $("div#mytags").append("<div>"+str.replace(" ","_")+"</div>");
+            $("input").val('');
+        }
+    });
+    $("button#savebtn").click(function(){
+        window.opener='x';//avoid asking user
+        window.close();
+    });
+});
+</script>
+</head><body>
+<table border="2">
+<tr><th>Current Tags</th><th>Tag List</th></tr>
+<tr><td width="50%"><div id="mytags"></div></td>
+<td width="50%"><button id="srchbtn">Search new tag list</button>
+<div id="taglist"></div>
+</td></tr></table>
+<hr><input type="text" /><button id="addbtn">Add</button><h2>Import profile from <img id="fb" src="facebook_login.gif"/></h2>
+<hr><button id="savebtn">Save</button>
+</body></html>
