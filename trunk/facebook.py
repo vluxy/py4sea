@@ -720,7 +720,7 @@ class Facebook(object):
         args['v'] = '1.0'
         args['format'] = RESPONSE_FORMAT
         args['sig'] = self._hash_args(args)
-        print 'build_post:',args
+        #print 'build_post:',args
         return args
 
 
@@ -960,13 +960,16 @@ if __name__ == '__main__':
     facebook.login()
 
     # Login to the window, then press enter
-    print 'After logging in, press enter...'
-    raw_input()
+    #print 'After logging in, press enter...'
+    #raw_input()
+    import time
+    time.sleep(60)
 
     facebook.auth.getSession()
     #print 'Session Key:   ', facebook.session_key
     #print 'Your UID:      ', facebook.uid
 
+    print "\nfacebook works."
     info = facebook.users.getInfo([facebook.uid],['education_history'])[0]
     str = ''
     for edu in info['education_history']:
@@ -977,7 +980,7 @@ if __name__ == '__main__':
     f.close()
     #print edu['name'], edu['degree'], edu['year']#"""edu['name'] edu['degree'] edu['year']"""
     #print info
-    
+
     """info = facebook.users.getInfo([facebook.uid], ['name', 'birthday', 'affiliations', 'sex'])[0]
 	print info
 

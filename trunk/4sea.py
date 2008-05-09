@@ -103,7 +103,11 @@ def sendchat(name, msg):
     sendudp.sendto(gmyname+':'+msg.split('=')[1]+'\n',(addr[0],int(addr[1])))
     sendudp.close()
     #print addr
-
+def formtags(taglist):
+    ret = ''
+    for tag in taglist:
+        ret+='<div>'+tag+'</div>'
+    return ret
 class myHTTPhandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.endswith("frlist"):
@@ -113,6 +117,24 @@ class myHTTPhandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             self.send_header("Content-Length", len(result))
             self.end_headers()
             self.wfile.write(result)
+            return
+        if self.path.endswith(".tags"):
+            if self.path.endswith("my.tags"):
+                myf = open("myself.dat")
+            else:
+                myf = open("taglist.dat")
+            myf.readline()#skip first line of contacts
+            mytag = myf.readline()[:-1].split(',')
+            myf.close()
+            result = formtags(mytag)
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", len(result))
+            self.end_headers()
+            self.wfile.write(result)
+            return
+        if self.path.endswith("facebook"):
+            os.system("python facebook.py")
             return
         SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
         #self.send_error(404, "File not found")
@@ -148,6 +170,9 @@ def main(name):
         myf.write(mycxt.replace(" ","_") + "\n" + mytag.replace(" ","_") + "\n")
         myf.close()
     #pub(name, mycxt + ";" + mytag) #pub will replace " " by "_"
+    myf=open("taglist.dat",'w')
+    myf.write("taglist\nAcura,Audi,Benz,BMW,Buick,Cadillac,Chevy,Ford,GMC,Honda,Infiniti,Jeep,Lexus,Nissan,Toyota,VW\n")
+    myf.close()
 
     httpd = myHTTPserver(('',8080),myHTTPhandler)
     #thread.start_new_thread(httpd.handle_request,())
