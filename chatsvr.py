@@ -11,7 +11,7 @@ class myserver(SocketServer.ThreadingUDPServer):
     pass
 
 if __name__ == "__main__":
-    udpd=myserver(('',43210),myhandler)
+    udpd=myserver(('',2121),myhandler)
     udpd.serve_forever()
     
     #proxyd.serve_forever()
