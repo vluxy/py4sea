@@ -11,13 +11,7 @@ class myserver(SocketServer.ThreadingUDPServer):
     pass
 
 if __name__ == "__main__":
-    listenport = 43210
-    try:
-        udpd=myserver(('',listenport),myhandler)
-    except:
-        print 'open socket error!'
-        exit
-    #print 'UDP server on %s' % listenport
+    udpd=myserver(('',43210),myhandler)
     udpd.serve_forever()
     
     #proxyd.serve_forever()
