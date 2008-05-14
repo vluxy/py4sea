@@ -25,8 +25,8 @@ def getsvc():
       port = [8080]
       txt = ["org.freedesktop.Avahi.cookie=1853033450" "hereistxt"]
     """
-    #(pin, pout) = os.popen2("avahi-browse -t -r -k -l _p2pchat._udp")
-    pout = open("webui/mockavahi.txt")
+    (pin, pout) = os.popen2("avahi-browse -t -r -k -l _p2pchat._udp")
+    #pout = open("webui/mockavahi.txt")
     flag = False
     svclist = []
     for line in pout.readlines():
@@ -169,7 +169,7 @@ def main(name):
         myf = open("myself.dat","w")
         myf.write(mycxt.replace(" ","_") + "\n" + mytag.replace(" ","_") + "\n")
         myf.close()
-    #pub(name, mycxt + ";" + mytag) #pub will replace " " by "_"
+    pub(name, mycxt + ";" + mytag) #pub will replace " " by "_"
     myf=open("taglist.dat",'w')
     myf.write("taglist\nAcura,Audi,Benz,BMW,Buick,Cadillac,Chevy,Ford,GMC,Honda,Infiniti,Jeep,Lexus,Nissan,Toyota,VW\n")
     myf.close()
