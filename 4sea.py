@@ -65,9 +65,9 @@ def getMutual(name, txt):
             mycxt = myf.readline()[:-1].split(',')#trim \n
             mytag = myf.readline()[:-1].split(',')
             myf.close()
-            [cxt, tag] = txt.split(';')
-            cxt = cxt.split(',')
-            tag = tag.split(',')
+            tmp = txt.split(';')
+            cxt = tmp[0].split(',')
+            tag = tmp[1].split(',')
             #print mycxt,mytag,cxt,tag
             f=open(name+".dat","a")
             for e in cxt:
