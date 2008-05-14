@@ -10,7 +10,7 @@ gmyname = ""
 def pub(name, txt):
     """call avahi to publish our svc, based on name and other info
     avahi-publish -s name _p2pchat._udp portnum hereistxt &"""
-    (pin, pout) = os.popen2("avahi-publish -s "+name.replace(" ", "_")+" _p2pchat._udp 2121 "+txt.replace(" ","_")+" &")
+    (pin, pout) = os.popen2("avahi-publish -s "+name.replace(" ", "_")+" _p2pchat._udp 2121 "+'"'+txt.replace(" ","_")+'"'+" &")
     (pin, pout) = os.popen2("python chatsvr.py 2121 &")
     #print pout.read()
 
